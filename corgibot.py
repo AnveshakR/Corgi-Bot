@@ -33,17 +33,22 @@ async def on_message(message):
         if (msg.find("shibe") != -1):
             rslash = 'shibes'
     
-        submissions = reddit.subreddit(rslash).hot()
-        post_to_pick = random.randint(1,10)
-        for i in range(0, post_to_pick):
+        submissions = reddit.subreddit(rslash).new()
+        sub_arr=[]
+        for i in range(0, 10):
             submission = next(x for x in submissions if not x.stickied)
+            if (submission.url.find("i.redd.it") != -1):
+                sub_arr.append(submission.url)
 
-        await message.channel.send(submission.url)
+        await message.channel.send(random.choice(sub_arr))
         await message.channel.send("provided by MUSTANGBOSSBOSS <3")
 
     elif msg.lower() == "who is the best":
-        await message.channel.send("Anveshak is the best!")
-        
+        arr = ["Anveshak", "Maitreyi"]
+        name = random.choice(arr)
+        await message.channel.send((name+" is the best!"))
+        #await message.channel.send(("Maitreyi is the best!"))
+
     else:
         pass
 
