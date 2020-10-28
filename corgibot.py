@@ -4,36 +4,47 @@ from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
 import random
+import praw
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-
-headers = {"User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0"}
-url = ""
+REDDIT_ID = os.getenv('CLIENT_ID')
+REDDIT_SECRET = os.getenv('CLIENT_SECRET')
 
 client = discord.Client()
 
+reddit = praw.Reddit(client_id=REDDIT_ID,
+                     client_secret=REDDIT_SECRET,
+                     user_agent='corgibot by u/mustangboss8055')
+
 @client.event
 async def on_message(message):
+
+    rslash = ''
     if message.author == client.user:
         return
 
     msg = message.content
     if msg[0:4] == "gib ":
         if (msg.find("corgi") != -1):
-            url = 'https://www.reddit.com/r/corgi/'
+            rslash = 'corgi'
 
         if (msg.find("shibe") != -1):
-            url = 'https://www.reddit.com/r/shibes/'
+            rslash = 'shibes'
     
-    page  = requests.get(url, headers=headers)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    links = soup.findAll("img", {"class":"_2_tDEnGMLxpM6uOa2kaDB3 ImageBox-image media-element _1XWObl-3b9tPy64oaG6fax"})
-    choice = random.choice(links)
-    src = choice['src']
+        submissions = reddit.subreddit(rslash).hot()
+        post_to_pick = random.randint(1,10)
+        for i in range(0, post_to_pick):
+            submission = next(x for x in submissions if not x.stickied)
 
-    await message.channel.send(src)
-    await message.channel.send("provided by MUSTANGBOSSBOSS <3")
+        await message.channel.send(submission.url)
+        await message.channel.send("provided by MUSTANGBOSSBOSS <3")
+
+    elif msg.lower() == "who is the best":
+        await message.channel.send("Anveshak is the best!")
+        
+    else:
+        pass
 
 client.run(TOKEN)
