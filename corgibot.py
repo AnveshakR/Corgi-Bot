@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import random
 import praw
+from discord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -18,6 +19,15 @@ reddit = praw.Reddit(client_id=REDDIT_ID,
                      client_secret=REDDIT_SECRET,
                      user_agent='corgibot by u/mustangboss8055')
 
+functions = ["corgi", "shibe"]
+
+@client.event
+async def on_ready():
+    #activity = discord.Game(name = "gib", type = 2)
+    #await client.change_presence(status=discord.Status.online, activity=activity)
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="gib"))
+
+
 @client.event
 async def on_message(message):
 
@@ -27,6 +37,13 @@ async def on_message(message):
 
     msg = message.content
     if msg[0:4] == "gib ":
+
+        if (msg.find("help") != -1):
+            await message.channel.send("Use gib followed by: ")
+            for i in functions:
+                await message.channel.send(i)
+            return
+
         if (msg.find("corgi") != -1):
             rslash = 'corgi'
 
