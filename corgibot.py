@@ -19,7 +19,7 @@ reddit = praw.Reddit(client_id=REDDIT_ID,
                      client_secret=REDDIT_SECRET,
                      user_agent='corgibot by u/mustangboss8055')
 
-functions = ["corgi", "shibe"]
+functions = ["corgi", "shibe", "puggy"]
 
 @client.event
 async def on_ready():
@@ -49,7 +49,11 @@ async def on_message(message):
 
         if (msg.find("shibe") != -1):
             rslash = 'shibes'
-    
+
+        if (msg.find("puggy") != -1):
+            rslash = 'pugs'
+
+        """
         submissions = reddit.subreddit(rslash).new()
         sub_arr=[]
         for i in range(0, 10):
@@ -57,7 +61,15 @@ async def on_message(message):
             if (submission.url.find("i.redd.it") != -1):
                 sub_arr.append(submission.url)
 
-        await message.channel.send(random.choice(sub_arr))
+        print(sub_arr)
+        """
+        submission = ''
+        while(1):
+            submission = reddit.subreddit(rslash).random()
+            if (submission.url.find("i.redd.it") != -1):
+                break
+
+        await message.channel.send(submission.url)
         await message.channel.send("provided by MUSTANGBOSSBOSS <3")
 
     elif msg.lower() == "who is the best":
