@@ -19,7 +19,7 @@ reddit = praw.Reddit(client_id=REDDIT_ID,
                      client_secret=REDDIT_SECRET,
                      user_agent='corgibot by u/mustangboss8055')
 
-functions = ["corgi", "shibe", "puggy"]
+functions = ["corgi", "shibe", "puggy", "cat"]
 
 @client.event
 async def on_ready():
@@ -52,6 +52,9 @@ async def on_message(message):
 
         if (msg.find("puggy") != -1):
             rslash = 'pugs'
+
+        if (msg.find("cat") != -1):
+            rslash = 'cat'
 
         """
         submissions = reddit.subreddit(rslash).new()
