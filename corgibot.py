@@ -2,7 +2,6 @@ import os
 import discord
 from dotenv import load_dotenv
 import requests
-from bs4 import BeautifulSoup
 import random
 import praw
 from discord.ext import commands
@@ -13,7 +12,7 @@ GUILD = os.getenv('DISCORD_GUILD')
 REDDIT_ID = os.getenv('CLIENT_ID')
 REDDIT_SECRET = os.getenv('CLIENT_SECRET')
 
-client = discord.Client()
+client = commands.Bot(command_prefix = "gib")
 
 reddit = praw.Reddit(client_id=REDDIT_ID,
                      client_secret=REDDIT_SECRET,
@@ -23,8 +22,6 @@ functions = ["corgi", "shibe", "puggy", "cat"]
 
 @client.event
 async def on_ready():
-    #activity = discord.Game(name = "gib", type = 2)
-    #await client.change_presence(status=discord.Status.online, activity=activity)
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="gib"))
 
 
@@ -56,24 +53,23 @@ async def on_message(message):
         if (msg.find("cat") != -1):
             rslash = 'cat'
 
-        """
-        submissions = reddit.subreddit(rslash).new()
-        sub_arr=[]
-        for i in range(0, 10):
-            submission = next(x for x in submissions if not x.stickied)
-            if (submission.url.find("i.redd.it") != -1):
-                sub_arr.append(submission.url)
-
-        print(sub_arr)
-        """
         submission = ''
         while(1):
             submission = reddit.subreddit(rslash).random()
             if (submission.url.find("i.redd.it") != -1):
                 break
 
-        await message.channel.send(submission.url)
-        await message.channel.send("provided by MUSTANGBOSSBOSS <3")
+        embed = discord.Embed(
+            title = "Here is your chonk!",
+            color = discord.Colour(0x7289DA)
+        )
+        embed.set_image(url=submission.url)
+        embed.set_footer(text="Provided by Anveshak <3")
+
+        await message.channel.send(embed = embed)
+
+        #await message.channel.send(submission.url)
+        #wait message.channel.send("provided by MUSTANGBOSSBOSS <3")
 
     elif msg.lower() == "who is the best":
         arr = ["Anveshak", "Maitreyi"]
