@@ -68,14 +68,10 @@ async def on_message(message):
 
         await message.channel.send(embed = embed)
 
-        #await message.channel.send(submission.url)
-        #wait message.channel.send("provided by MUSTANGBOSSBOSS <3")
-
     elif msg.lower() == "who is the best":
         arr = ["Anveshak", "Maitreyi"]
         name = random.choice(arr)
         await message.channel.send((name+" is the best!"))
-        #await message.channel.send(("Maitreyi is the best!"))
 
     else:
         pass
