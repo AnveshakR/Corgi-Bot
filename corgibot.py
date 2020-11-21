@@ -20,6 +20,13 @@ reddit = praw.Reddit(client_id=REDDIT_ID,
 
 functions = ["corgi", "shibe", "puggy", "cat"]
 
+hoes = ["<:woodhoe:779730777112838154>",
+        "<:stonehoe:779730777024888873>",
+        "<:ironhoe:779730777206161429>",
+        "<:goldhoe:779730777200918528>",
+        "<:diamondhoe:779730777126076446>",
+        "<:netheritehoe:779730776920293407>"]
+
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="gib"))
@@ -52,6 +59,29 @@ async def on_message(message):
 
         if (msg.find("cat") != -1):
             rslash = 'cat'
+
+        if (msg.find("hoerate") != -1):
+            if(len(message.mentions) == 1):
+                name = message.mentions[0].nick
+                hoe = random.choice(hoes)
+                number = hoes.index(hoe) + 1
+                finalhoe = ""
+                for i in range (number):
+                    finalhoe = finalhoe+hoe+" "
+                hoeembed = discord.Embed(
+                    title = "Hoe Rater",
+                    color = discord.Color(0x7289DA)
+                )
+                hoeembed.add_field(
+                    name = name,
+                    value = finalhoe,
+                    inline = False
+                )
+                await message.channel.send(embed = hoeembed)
+                return
+            else:
+                await message.channel.send("Just one person can be hoed at a time!")
+                return
 
         submission = ''
         while(1):
